@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "clock-py"
+name = "ttyclock-py"
 version = "1.0.0"
 readme = "README.md"
 description = "Basically tty-clock but rewritten in Python"
@@ -11,7 +11,7 @@ python = "^3.8"
 windows-curses = { version = "^2.3.1", platform = "win32" }
 
 [tool.poetry.scripts]
-clock-py = "clock.py.__main__:main"
+ttyclock-py = "clock.py.__main__:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

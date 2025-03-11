@@ -24,7 +24,7 @@ A Python implementation of the classic tty-clock, a digital clock for your termi
 
 ```bash
 # Install using pipx
-pipx install clock-py
+pipx install ttyclock-py
 ```
 
 ### Build from Source
@@ -40,13 +40,13 @@ cd clock.py
 poetry build
 
 # Install the package
-pipx install dist/clock_py-1.0.0.tar.gz
+pipx install dist/ttyclock_py-1.0.0.tar.gz
 ```
 
 ## Usage
 
 ```bash
-clock-py
+ttyclock-py
 ```
 
 ### Command Line Options
