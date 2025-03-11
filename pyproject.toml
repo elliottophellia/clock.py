@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "clock-py"
+version = "1.0.0"
+readme = "README.md"
+description = "Basically tty-clock but rewritten in Python"
+authors = ["Reidho Satria <me@rei.my.id>"]
+packages = [{include = "clock/py", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+windows-curses = { version = "^2.3.1", platform = "win32" }
+
+[tool.poetry.scripts]
+clock-py = "clock.py.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
