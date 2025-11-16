@@ -1,99 +1,162 @@
-# Clock.py
+# ttyclock-py
 
-A Python implementation of the classic tty-clock, a digital clock for your terminal.
+A Python implementation of the classic [tty-clock](https://github.com/xorg62/tty-clock), a digital clock for your terminal.
 
-
-![Python](https://img.shields.io/badge/PYTHON-3.X-bf616a?style=flat-square) ![License](https://img.shields.io/badge/LICENCE-CC%20BY%20SA%204.0-ebcb8b?style=flat-square) ![Version](https://img.shields.io/badge/VERSION-1.0.0-a3be8c?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square) ![License](https://img.shields.io/badge/License-CC--BY--SA--4.0-green?style=flat-square) ![Version](https://img.shields.io/badge/Version-2.0.0-orange?style=flat-square)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/BUY%20ME%20A%20COFFEE-79B8CA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ReidhoSatria) [![Traktir Saya Kopi](https://img.shields.io/badge/TRAKTIR%20SAYA%20KOPI-FAC76C?style=for-the-badge&logo=BuyMeACoffee&logoColor=black)](https://saweria.co/elliottophellia)
 
-## Features
+## What's new in v2.0.0 ?!
 
-- 12/24 hour mode
-- Show/hide seconds
-- Display date
-- Custom colors
-- Blink separator
-- UTC time mode
-- Centered or custom positioning
-- Bold characters
+Major rewrite. Here's what changed:
 
-## Installation
+**Tooling:**
+- Poetry → uv
+- Python 3.8+ → 3.10+
+- Added mypy (strict type checking)
+- Added ruff (linter)
+- Reorganized from `src/clock/py/` to `src/ttyclock/`
 
-### Release
+**Code:**
+- Split into modules instead of one big file
+- Full type hints
+- Better architecture
+
+**Features:**
+- 5 fonts (was 1)
+- Screensaver mode
+- Random colors
+- Better date format (now shows day of week)
+- Terminal resize handling
+- Centered error messages
+
+**Breaking:**
+- Needs Python 3.10+
+- Module path changed (but CLI is same)
+
+All CLI arguments work the same. Config format is backwards compatible.
+
+## Install
 
 ```bash
-# Install using pipx
-pipx install ttyclock-py
+pip install ttyclock-py
 ```
 
-### Build from Source
+Build from source:
 
 ```bash
-# Clone the repository
 git clone https://github.com/elliottophellia/clock.py
-
-# Change directory
 cd clock.py
-
-# Build the package
-poetry build
-
-# Install the package
-pipx install dist/ttyclock_py-1.0.0.tar.gz
+uv build
+pipx install dist/ttyclock_py-2.0.0-py3-none-any.whl
 ```
 
 ## Usage
 
 ```bash
-ttyclock-py
+ttyclock-py              # basic
+ttyclock-py -c -s        # centered with seconds
+ttyclock-py -t -P -d     # 12-hour + AM/PM + date
+ttyclock-py -r -R        # screensaver mode with random colors
 ```
 
-### Command Line Options
+## Options
 
 ```
--h, --help            show this help message and exit
--c, --center          Center the clock in the terminal
--s, --seconds         Show seconds in the clock
--b, --bold            Use bold characters
--t, --twelve          Use 12-hour format
--P, --ampm            Show AM/PM indicator in 12-hour format
--k, --blink           Blink the colon
--u, --utc             Use UTC time
--d, --date            Show current date
--C, --color {0,1,2,3,4,5,6,7}
-                      Set the clock color (0-7)
--x X                  Set the clock's x position
--y Y                  Set the clock's y position
--D, --delay DELAY     Set the update delay (seconds)
--S, --save-config     Save current settings to config file
+-c, --center          center it
+-s, --seconds         show seconds
+-b, --bold            bold text
+-t, --twelve          12-hour format
+-P, --ampm            show AM/PM (needs -t)
+-k, --blink           blink the colon
+-u, --utc             use UTC
+-d, --date            show date
+-r, --screensaver     bouncing screensaver (like DVD logo)
+-R, --random-color    random colors when bouncing
+-C N                  color (0-7): black/red/green/yellow/blue/magenta/cyan/white
+-f FONT               font: block/slim/dot/bold/mini
+-x X, -y Y            position
+-D DELAY              update delay in seconds (default 0.1)
+-S, --save-config     save settings
 ```
 
-## Configuration
+Quit with `q`, `Q`, or `ESC`.
 
-The program stores its configuration in `~/.config/clock-py/config.json`. You can modify this file directly or use the `--save-config` option to save your current settings.
+## Fonts
 
-Default configuration:
+5 fonts available:
+
+- `block` - default
+- `slim` - narrower
+- `dot` - retro LED look
+- `bold` - thick
+- `mini` - compact
+
+Try them: `ttyclock-py -f dot -c`
+
+## Screensaver
+
+`-r` makes it bounce around. Add `-R` for color changes.
+
+```bash
+ttyclock-py -r -R -s -d
+```
+
+## Config
+
+Config location:
+- Linux/macOS: `~/.config/ttyclock-py/config.json`
+- Windows: `%LOCALAPPDATA%\ttyclock-py\config.json`
+
 ```json
 {
   "color": "GREEN",
+  "font": "block",
   "delay": 0.1,
   "options": {
-      "twelve_hour": False,
-      "show_seconds": False,
-      "bold": False,
-      "center": False,
-      "blink_colon": False,
-      "utc": False,
-      "show_date": False,
-      "show_ampm": False,
+    "twelve_hour": false,
+    "show_seconds": true,
+    "bold": false,
+    "center": true,
+    "blink_colon": false,
+    "utc": false,
+    "show_date": true,
+    "show_ampm": false,
+    "screensaver": false,
+    "random_color": false
   },
-  "position": {
-      "x": 0,
-      "y": 0
-  }
+  "position": {"x": 0, "y": 0}
 }
 ```
+
+Use `-S` to save current settings or edit the file directly.
+
+## Dev
+
+```bash
+git clone https://github.com/elliottophellia/clock.py
+cd clock.py
+uv sync
+uv run ttyclock-py
+
+# checks
+uv run ruff check src/ttyclock
+uv run mypy src/ttyclock
+
+# build
+uv build
+```
+
+Code is in `src/ttyclock/`:
+- `types.py` - enums/dataclasses
+- `fonts.py` - font data
+- `digits.py` - pattern lookup
+- `time_formatter.py` - time/date strings
+- `clock.py` - state
+- `renderer.py` - drawing
+- `screensaver.py` - bouncing
+- `config.py` - file I/O
+- `__main__.py` - CLI
 
 ## License
 
@@ -105,6 +168,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Write your amazing code
+4. Make sure pass `ruff check` and `mypy` first
+5. Commit your changes (`git commit -m 'Add some AmazingFeature'`) 
+6. Push to the branch (`git push origin feature/AmazingFeature`)
+7. Open a Pull Request
